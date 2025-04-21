@@ -1,4 +1,3 @@
-// File: src/App.jsx
 import { useState } from 'react';
 import "./UploadSection.css"
 import VideoUpload from './VideoUpload';
@@ -10,8 +9,8 @@ function UploadSection() {
   const [players, setPlayers] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validation
@@ -33,24 +32,40 @@ function UploadSection() {
     // Show loading state
     setIsAnalyzing(true);
     
-    // Simulate analysis (would be replaced with actual API call)
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      alert('Analysis complete! Results would be displayed here in a real application.');
-      
-      // For debugging
-      console.log({
-        video: videoFile,
-        players: players,
-        court: selectedCourt
+    // Prepare data to send to API
+    const formData = new FormData();
+    formData.append('video', videoFile);
+    formData.append('players', JSON.stringify(players));
+    formData.append('court', selectedCourt);
+
+    try {
+      const response = await fetch('https://your-api-endpoint.com/analyze', {
+        method: 'POST',
+        body: formData,
       });
-    }, 3000);
+      
+      const data = await response.json();
+
+      if (response.ok) {
+        // Success case
+        setIsAnalyzing(false);
+        alert('✅ Analysis Successful!');
+        // Display results (data returned from the API)
+        console.log('Analysis result:', data);
+      } else {
+        // Rejected case (error)
+        setIsAnalyzing(false);
+        alert(`❌ Analysis failed: ${data.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      // Handle network or other errors
+      setIsAnalyzing(false);
+      alert(`🚨 Server Error: ${error.message}`);
+    }
   };
-  
+
   return (
     <div className="app-container">
-      {/* <h1> Video Analysis</h1> */}
-      
       <div className="form-container">
         <form id="analysis-form" onSubmit={handleSubmit}>
           {/* Video Upload Section */}

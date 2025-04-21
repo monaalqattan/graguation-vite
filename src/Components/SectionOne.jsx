@@ -7,12 +7,12 @@ const SectionOne = () => {
       <div className="container">
         <a href="#" className="logo">Padelytics</a>
         <ul className="main-nav">
-          <li><a href="#articles">HOME</a></li>
-          <li><a href="#gallery">SHOP</a></li>
-          <li><a href="#features">PROFILE</a></li>
-          <li><a href="#features">CONTACT</a></li>
+          <li><Link to="/home">HOME</Link></li>
+          <li><Link to="/shop">SHOP</Link></li>
+          <li><Link to="/profile">PROFILE</Link></li>
+          <li><Link to="/contact">CONTACT</Link></li>
         </ul>
-        <button className="btn-navBar">LOGIN</button>
+        <Link to="/Login" className="btn-navBar">LOGIN</Link>
       </div>
     </div>
   );
